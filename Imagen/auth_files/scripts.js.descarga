@@ -1,0 +1,85 @@
+function tooglePwd(inputId) {
+    var x = document.getElementById(inputId)
+    var showPwdIcon = document.getElementById('show-pwd')
+    var hidePwdIcon = document.getElementById('hide-pwd')
+
+    if (x.type === 'password') {
+        x.type = 'text'
+        showPwdIcon.style.display = 'none'
+        hidePwdIcon.style.display = 'block'
+    } else {
+        x.type = 'password'
+        showPwdIcon.style.display = 'block'
+        hidePwdIcon.style.display = 'none'
+    }
+}
+
+function handleChange() {
+    const passwordNew = document.querySelector('#password-new')
+    const passwordConfirm = document.querySelector('#password-confirm')
+    const password = document.querySelector('#password')
+    const username = document.querySelector('#username')
+    const email = document.querySelector('#email-to-address')
+    const submitBtn = document.querySelector('#kc-login')
+    const textBtn = document.querySelector('#kc-login-p')
+    const arrowBtn = document.querySelector('#arrow')
+
+    const emailRegex =
+        /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+
+    const activeStyles = () => {
+        const fillWhite = 'invert(100%) sepia(0%) saturate(0%) hue-rotate(168deg) brightness(104%) contrast(101%)'
+        submitBtn.style.background = '#00004E'
+        submitBtn.style.pointerEvents = 'initial'
+        submitBtn.classList.add('button-hover')
+        textBtn.style.color = '#FFFFFF'
+        arrowBtn.style.filter = fillWhite
+    }
+
+    const disabledStyles = () => {
+        const fillGray = 'invert(51%) sepia(0%) saturate(1164%) hue-rotate(281deg) brightness(90%) contrast(86%)'
+
+        submitBtn.style.background = '#EDEDED'
+        submitBtn.style.pointerEvents = 'none'
+        submitBtn.classList.remove('button-hover')
+        textBtn.style.color = '#747579'
+        arrowBtn.style.filter = fillGray
+    }
+
+    const handleEmailInputChange = () => {
+        if (emailRegex.test(username.value)) {
+            return activeStyles()
+        } else {
+            return disabledStyles()
+        }
+    }
+
+    const handleLoginInputChange = () => {
+        if (!password) return handleEmailInputChange()
+
+        if (username.value && password.value.length > 7) {
+            return activeStyles()
+        } else {
+            return disabledStyles()
+        }
+    }
+
+    const handlePasswordRecoveryInputChange = () => {
+        if (passwordNew.value.length > 7 && passwordConfirm.value.length > 7) {
+            return activeStyles()
+        } else {
+            return disabledStyles()
+        }
+    }
+
+    username?.addEventListener('input', handleLoginInputChange)
+    password?.addEventListener('input', handleLoginInputChange)
+
+    passwordConfirm?.addEventListener('input', handlePasswordRecoveryInputChange)
+    passwordNew?.addEventListener('input', handlePasswordRecoveryInputChange)
+}
+
+window.onload = function (e) {
+    document.getElementById('preloader').style.display = 'none'
+    handleChange()
+}
